@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta name="viewport" content="initial-scale=1, user-scalable=no">
+		<style>
+			body {
+				font-family: Helvetica;
+				color: #333;
+			}
+			h1 {
+				font-size: 2.25em;
+			}
+			h2 {
+				font-size: 1.9em;
+			}
+			p {
+				font-size: 0.95em;
+				line-height: 1.4em;
+				padding-left: 16px;
+			}
+			a {
+				color: #06d;
+				text-decoration: none;
+			}
+			a:hover {
+				text-decoration: underline;
+			}
+			.title {
+				border-bottom: 1px solid #ddd;
+				padding-bottom: 12px;
+			}
+			.minor {
+				font-size: 0.4em;
+				color: #999;
+			}
+			.subtitle {
+				border-bottom: 1px solid #eee;
+				padding-bottom: 12px;
+			}
+			.wrapper {
+				width: 900px;
+				margin: 0 auto;
+			}
+
+			.upstatus {
+				width: 1.35em;
+				height: 1.2em;
+				text-align: center;
+				vertical-align: middle;
+				display: inline-block;
+				color: white;
+			}
+			.upstatus-good {
+				width: 0; 
+				height: 0; 
+				border-left: 12px solid transparent;
+				border-right: 12px solid transparent;								
+				border-bottom: 12px solid #390;
+			}
+			.upstatus-bad {
+				width: 0; 
+				height: 0; 
+				border-left: 12px solid transparent;
+				border-right: 12px solid transparent;								
+				border-top: 12px solid #d30;
+			}
+			.uptitle {
+				display: inline-block;
+				vertical-align: middle;
+				padding-left: 12px;
+				font-size: 2em;
+			}
+			#upbox {
+				border-collapse: collapse;
+				border-bottom: 1px solid #999;
+			}
+			#upbox td, #upbox th {
+				padding: 16px;
+			}
+			#upbox tbody tr {
+				border-top: 1px solid #999;
+			}
+			#upbox tbody td {
+				padding: 12px;
+				text-align: center;
+			}
+			.service {
+				text-align: left !important;
+			}
+			.upsince {
+				font-size: 0.8em;
+				padding-top: 6px;
+			}
+		</style>
+		<script src="static/zepto.min.js"></script>
+		<script src="static/Chart.min.js"></script>
+	</head>
+	<body>
+		<div class="wrapper">
+			<h1 class="title">ggdice &mdash; services statuses
+				<span class="minor" title="Uptime status provided by uptimerobot.com">?</span>
+			</h1>
+
+			<table id="upbox">
+				<thead>
+					<tr>
+						<th width="400px" class='service'>Service</th>
+						<th width="120px">Last 24 hours</th>
+						<th width="120px">Last 7 days</th>
+						<th width="120px">Last 30 days</th>
+						<th width="120px">All time</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+			<p>Next update in <span id="next-update">5m</span></p>
+		</div>
+		<script src="static/uptime.js"></script>
+		<script>
+			var ggdice_mkey = 'm775935665-1f72352f38155275f14cf8c1';
+			var patten_mkey = 'm775935666-69d8f2597b42a7b279be9bb1';
+			var keylist = [ggdice_mkey, patten_mkey];
+			var refresh_time = 300;
+			var now = 300;
+
+			format_seconds = function(s) {
+				var nmin = Math.floor(s / 60);
+				var nsec = s % 60;
+				text = '';
+				if (nmin) {
+					text += nmin + 'm';
+				}
+				if (nsec) {
+					text = text + ' ' + nsec + 's';
+				}
+				return text;
+			};
+
+			update_refresh = function() {
+				now -= 1;
+				$('#next-update').text(format_seconds(now));
+			};
+
+			update_status = function() {
+				$('#upbox tbody').empty();
+				for (var i = 0; i < keylist.length; i++) {
+					uptime_data(keylist[i]);
+				}
+				now = 300;
+			};
+
+			update_status();
+			setInterval(update_status, refresh_time * 1000);
+			setInterval(update_refresh, 1000);
+		</script>
+	</body>
+</html>
