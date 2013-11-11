@@ -68,7 +68,8 @@ display_monitor = function(monitor) {
 	/* Build charts now. */
 	for (var i = 0; i < pie.length; i++) {
 		var canvas = document.getElementById(lbl[i] + "-" + id);
-		var pie_i = new Chart(canvas.getContext("2d")).Doughnut(pie[i], {animation: false});
+		var pie_i = new Chart(canvas.getContext("2d")).Doughnut(pie[i], {
+			animationSteps: 60, animationEasing: "easeOutQuart"});
 	}
 }
 
